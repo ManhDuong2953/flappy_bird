@@ -1,5 +1,6 @@
 const cvs = document.querySelector("canvas");
 const ctx = cvs.getContext("2d");
+ctx.fillText("Click to play", 200, 500, 200);
 
 // load image
 var bird = new Image();
@@ -28,8 +29,6 @@ var flb = {
   bY: 150,
   spaces: 50,
   gravity: 1.5,
-  score: 0,
-  speed: 1,
 };
 document.addEventListener("keydown", (e) => moveUp(e.code));
 
@@ -70,8 +69,7 @@ function draw() {
       });
     }
 
-    pipe[i].x -= flb.speed;
-
+    pipe[i].x -= 1;
     if (
       birdEle.y + bird.height >= cvs.height - fg.height ||
       (birdEle.x + bird.width >= pipe[i].x &&
@@ -79,7 +77,13 @@ function draw() {
         (birdEle.y <= flb.constant - flb.gap ||
           birdEle.y + bird.height >= flb.constant))
     ) {
-      location.reload();
+      flb.bX = 10;
+      flb.bY = 150;
+      if (confirm("You are looser!! Replay?")) {
+        location.reload();
+      } else {
+        window.close();
+      }
     }
 
     if (pipe[i].x + pipeNorth.width === 10) {
@@ -92,6 +96,6 @@ function draw() {
   ctx.font = "30px Arial";
   ctx.drawImage(fg, 0, cvs.height - fg.height);
   ctx.fillText("Score: " + score, 20, cvs.height - 50);
-  requestAnimationFrame(draw);
+  setTimeout(draw, 1000 / 60);
 }
 draw();
